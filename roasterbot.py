@@ -29,7 +29,7 @@ def hello():
     elif len(_words[0]) == 2 and _words[0] not in greeting_list:  #a request for product info
         _message = get_product_info( _words[0] )[0]
         _media = get_product_info( _words[0] )[1]
-    elif _words[0].lower == 'order':
+    elif _words[0].lower() == 'order':
         _message = order(_body)
     else:
         _message = get_greeting(_words)
@@ -52,14 +52,28 @@ def order(body):
     The destination should probably be stored in the environment; e.g., 
     ENV['SMS_ORDER_NUMBER']
     '''
-    return 'Success'
+    
+    route = os.getenv('ORDER_ROUTE', '+10000000000')
+    token = os.getenv('AUTH_TOKEN', '+10000000000')
+    sid = os.getenv('ACCOUNT_SID', '+10000000000')
+    _from = request.values.get('From', '+12029993029')
+
+    client = TwilioRestClient(sid, token)
+    message = client.messages.create(
+            body=body,  # Message body, if any
+            to=route,
+            from_=_from,
+    )
+    print '%s %s  %s %s ' % (_from,route,token,sid)
+    return 'Thanks! We\'ll contact you shortly to firm up the details and get'\
+            ' payment info.  Happy Brewing!'
 
 
 @app.route("/help",methods=['GET', 'POST'])
 def help():
     _message = "Help is on the way! \nCommands:\n CMD > This message > DELIVERIES > " \
             "Location and times for drop-offs \n Two-Letter Code > " \
-            " Details and price of coffee. \n ORDER CODE qty (1-10 lbs) " \
+            " Details and price of coffee. \n ORDER qty (1-10 lbs) of CODE " \
             " Placing an order for 1-10 lbs."
     return _message
 
