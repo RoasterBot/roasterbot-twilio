@@ -8,6 +8,7 @@ import twilio.twiml
 
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
 _list = 'https://raw.githubusercontent.com/RoasterBot/lockhouse/gh-pages/coffees/list'
 greeting_list = ['hello', 'hello!', 'hey', 'hey!', 'hi', 'hi!', 'hola', 'yo', 'yo!']
 
@@ -48,9 +49,6 @@ def order(body):
     '''
     This is where we route the order to a workflow. At a minimum we forward an
     SMS message, email, phone call. Etc.
-
-    The destination should probably be stored in the environment; e.g., 
-    ENV['SMS_ORDER_NUMBER']
     '''
     
     route = os.getenv('ORDER_ROUTE', '+10000000000')
@@ -64,7 +62,7 @@ def order(body):
             to=route,
             from_=_from,
     )
-    print '%s %s  %s %s ' % (_from,route,token,sid)
+    #print '%s %s  %s %s ' % (_from,route,token,sid)
     return 'Thanks! We\'ll contact you shortly to firm up the details and get'\
             ' payment info.  Happy Brewing!'
 
