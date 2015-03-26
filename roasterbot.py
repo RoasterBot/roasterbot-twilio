@@ -55,16 +55,16 @@ def order(body):
     token = os.getenv('AUTH_TOKEN', '+10000000000')
     sid = os.getenv('ACCOUNT_SID', '+10000000000')
     _from = request.values.get('From', '+12029993029')
-
+    
     client = TwilioRestClient(sid, token)
-    message = client.messages.create(
-            body=body,  # Message body, if any
-            to=route,
-            from_=_from,
-    )
+    #message = client.messages.create(
+    #        body=body,  # Message body, if any
+    #        to=route,
+    #        from_=_from,
+    #)
     #print '%s %s  %s %s ' % (_from,route,token,sid)
-    return 'Thanks! We\'ll contact you shortly to firm up the details and get'\
-            ' payment info.  Happy Brewing!'
+    return 'Thanks, %s! We\'ll contact you shortly to firm up the details and get'\
+            ' payment info.  Happy Brewing!' % (_from)
 
 
 @app.route("/help",methods=['GET', 'POST'])
